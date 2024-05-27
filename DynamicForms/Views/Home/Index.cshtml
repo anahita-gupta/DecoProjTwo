@@ -1,0 +1,71 @@
+﻿@model DynamicForms.Models.FormModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Form</title>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Dynamic Form</h1>
+        <form asp-action="Index" method="post">
+            <div class="form-group">
+                <label asp-for="Name">Name (required):</label>
+                <input asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age">Age:</label>
+                <input asp-for="Age" id="ageInput" />
+                <span asp-validation-for="Age"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender">Gender:</label>
+                <select asp-for="Gender" id="genderSelect">
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+                <span asp-validation-for="Gender"></span>
+            </div>
+            <div class="form-group">
+                <label for="ageMandatory">Make Age Mandatory:</label>
+                <input type="checkbox" id="ageMandatory" name="AgeMandatory" value="true" @(Model.AgeMandatory ? "checked" : "") />
+            </div>
+            <div class="form-group">
+                <label for="genderMandatory">Make Gender Mandatory:</label>
+                <input type="checkbox" id="genderMandatory" name="GenderMandatory" value="true" @(Model.GenderMandatory ? "checked" : "") />
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function updateRequiredFields() {
+                if ($('#ageMandatory').is(':checked')) {
+                    $('#ageInput').attr('required', 'required');
+                } else {
+                    $('#ageInput').removeAttr('required');
+                }
+
+                if ($('#genderMandatory').is(':checked')) {
+                    $('#genderSelect').attr('required', 'required');
+                } else {
+                    $('#genderSelect').removeAttr('required');
+                }
+            }
+
+            // Initialize required fields on page load
+            updateRequiredFields();
+
+            // Update required fields when checkboxes change
+            $('#ageMandatory').change(updateRequiredFields);
+            $('#genderMandatory').change(updateRequiredFields);
+        });
+    </script>
+</body>
+</html>
